@@ -47,13 +47,50 @@ const slytherin = {
 // Reducer
 function reducer(state = initialState, action) {
     switch(action.type) {
+        case 'ADD_HOUSE_BEFORE':
+            return [
+                action.house,
+                ...state
+            ];
+        case 'ADD_HOUSE_AFTER':
+            return [
+                ...state,
+                action.house
+            ];
+        case 'ADD_HOUSE_MIDDLE_SLICE':
+            return [
+                ...state.slice(0, 2),
+                action.house,
+                ...state.slice(2)
+            ];
+        case 'ADD_HOUSE_MIDDLE_SPLICE':
+            const copy = [...state];
+            copy.splice(2, 0, action.house)
+            return copy;
+        case 'REMOVE_HOUSE_BY_NAME':
+            return state.filter((item, index) => {
+                return item.name !== action.name
+                // Another way to write it
+                // if(item.name === action.name) {
+                //     return false;
+                // } else {
+                //     return true
+                // };
+            })
+        case 'REMOVE_HOUSE_BY_INDEX':
+            return state.filter((item, index) => {
+                return index !== action.index
+            })
         default: 
-            return state
+            return state;
     }
 }
 
 // Store
 const store = createStore(reducer);
+store.dispatch({ type: 'ADD_HOUSE_MIDDLE_SPLICE', house: slytherin });
+// store.dispatch({ type: 'REMOVE_HOUSE_BY_NAME', name: 'Slytherin'})
+// store.dispatch({ type: 'REMOVE_HOUSE_BY_INDEX', index: 2})
 
 // Main App
 const SchoolAdmin = ({ houses }) => {
