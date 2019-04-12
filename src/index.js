@@ -37,6 +37,13 @@ const initialState = [
     // one is missing
 ];
 
+const slytherin = {
+    id: 3, 
+    name: 'Slytherin',
+    image: flags.slytherin,
+    points: 0
+}
+
 // Reducer
 function reducer(state = initialState, action) {
     switch(action.type) {
