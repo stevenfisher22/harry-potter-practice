@@ -28,7 +28,7 @@ const initialState = [
 // New Object to Add
 const newObject = {
     id: 3,
-    type: 'REFUND',
+    type: 'DO NOT STOP ME NOW',
     value: -9.22
 }
 
