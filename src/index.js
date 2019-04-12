@@ -76,11 +76,22 @@ function reducer(state = initialState, action) {
                 // } else {
                 //     return true
                 // };
-            })
+            });
         case 'REMOVE_HOUSE_BY_INDEX':
             return state.filter((item, index) => {
                 return index !== action.index
-            })
+            });
+        case 'ADD_POINTS':
+            return state.map((item, index) => {
+                if (item === action.house) {
+                    return {
+                        ...action.house,
+                        points: action.house.points + action.points
+                    }
+                } else {
+                    return item;
+                }
+            });
         default: 
             return state;
     }
@@ -92,12 +103,21 @@ store.dispatch({ type: 'ADD_HOUSE_MIDDLE_SPLICE', house: slytherin });
 // store.dispatch({ type: 'REMOVE_HOUSE_BY_NAME', name: 'Slytherin'})
 // store.dispatch({ type: 'REMOVE_HOUSE_BY_INDEX', index: 2})
 
+// OnClick Handler Function
+function addPoints(house, points) {
+    return {
+        type: 'ADD_POINTS',
+        house, 
+        points
+    }
+}
+
 // Main App
-const SchoolAdmin = ({ houses }) => {
+const SchoolAdmin = ({ houses, addPoints }) => {
     return (
         <main>
             {houses.map(house => (
-                <div key={house.id}>
+                <div key={house.id} onClick={() => addPoints(house, 50)}>
                     <img src={house.image} alt={house.name}/>
                     <div>{house.points} points</div>
                 </div>
@@ -111,7 +131,12 @@ const mapState = state => ({
     houses: state
 });
 
-const ConnectedApp = connect(mapState)(SchoolAdmin);
+// Map Dispatch to Props
+const mapDispatch = {
+    addPoints
+}
+
+const ConnectedApp = connect(mapState, mapDispatch)(SchoolAdmin);
 
 ReactDOM.render(
     <Provider store={store}>
