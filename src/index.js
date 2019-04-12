@@ -37,6 +37,7 @@ const initialState = [
     // one is missing
 ];
 
+// Slytherin House object
 const slytherin = {
     id: 3, 
     name: 'Slytherin',
