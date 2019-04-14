@@ -14,52 +14,28 @@ import './index.css';
 
 // *****************************************************************************************
 
-// Initial State - Array
-// const initialState = [
-//     {
-//         id: 0,
-//         name: 'Gryffindor',
-//         image: flags.gryffindor,
-//         points: 50
-//     },
-//     {
-//         id: 1,
-//         name: 'Ravenclaw',
-//         image: flags.ravenclaw,
-//         points: 100
-//     },
-//     {
-//         id: 2,
-//         name: 'Hufflepuff',
-//         image: flags.hufflepuff,
-//         points: 50
-//     },
-//     // one is missing
-// ];
-
-// Initial State - Object
-const initialState = {
-    houses: {
-        0: {
-            id: 0,
-            name: 'Gryffindor',
-            image: flags.gryffindor,
-            points: 50
-        },
-        1: {
-            id: 1,
-            name: 'Ravenclaw',
-            image: flags.ravenclaw,
-            points: 100
-        },
-        2: {
-            id: 2,
-            name: 'Hufflepuff',
-            image: flags.hufflepuff,
-            points: 50
-        },
-    }
-}
+// Initial State
+const initialState = [
+    {
+        id: 0,
+        name: 'Gryffindor',
+        image: flags.gryffindor,
+        points: 50
+    },
+    {
+        id: 1,
+        name: 'Ravenclaw',
+        image: flags.ravenclaw,
+        points: 100
+    },
+    {
+        id: 2,
+        name: 'Hufflepuff',
+        image: flags.hufflepuff,
+        points: 50
+    },
+    // one is missing
+];
 
 // Slytherin House object
 const slytherin = {
