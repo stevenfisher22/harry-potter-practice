@@ -14,31 +14,9 @@ import './index.css';
 
 // *****************************************************************************************
 
-// Initial State - Array
-// const initialState = [
-//     {
-//         id: 0,
-//         name: 'Gryffindor',
-//         image: flags.gryffindor,
-//         points: 50
-//     },
-//     {
-//         id: 1,
-//         name: 'Ravenclaw',
-//         image: flags.ravenclaw,
-//         points: 100
-//     },
-//     {
-//         id: 2,
-//         name: 'Hufflepuff',
-//         image: flags.hufflepuff,
-//         points: 50
-//     },
-//     // one is missing
-// ];
-
-// Initial State - Object
+// Initial State
 const initialState = {
+    selectedHouse: null,
     houses: {
         0: {
             id: 0,
@@ -58,6 +36,7 @@ const initialState = {
             image: flags.hufflepuff,
             points: 50
         },
+        // one is missing
     }
 }
 
@@ -72,51 +51,11 @@ const slytherin = {
 // Reducer
 function reducer(state = initialState, action) {
     switch(action.type) {
-        case 'ADD_HOUSE_BEFORE':
-            return [
-                action.house,
-                ...state
-            ];
-        case 'ADD_HOUSE_AFTER':
-            return [
+        case 'SELECT_HOUSE':
+            return {
                 ...state,
-                action.house
-            ];
-        case 'ADD_HOUSE_MIDDLE_SLICE':
-            return [
-                ...state.slice(0, 2),
-                action.house,
-                ...state.slice(2)
-            ];
-        case 'ADD_HOUSE_MIDDLE_SPLICE':
-            const copy = [...state];
-            copy.splice(2, 0, action.house)
-            return copy;
-        case 'REMOVE_HOUSE_BY_NAME':
-            return state.filter((item, index) => {
-                return item.name !== action.name
-                // Another way to write it
-                // if(item.name === action.name) {
-                //     return false;
-                // } else {
-                //     return true
-                // };
-            });
-        case 'REMOVE_HOUSE_BY_INDEX':
-            return state.filter((item, index) => {
-                return index !== action.index
-            });
-        case 'ADD_POINTS':
-            return state.map((item, index) => {
-                if (item === action.house) {
-                    return {
-                        ...action.house,
-                        points: action.house.points + action.points
-                    }
-                } else {
-                    return item;
-                }
-            });
+                selectedHouse: action.house
+            };
         default: 
             return state;
     }
@@ -124,25 +63,27 @@ function reducer(state = initialState, action) {
 
 // Store
 const store = createStore(reducer);
-store.dispatch({ type: 'ADD_HOUSE_MIDDLE_SPLICE', house: slytherin });
-// store.dispatch({ type: 'REMOVE_HOUSE_BY_NAME', name: 'Slytherin'})
-// store.dispatch({ type: 'REMOVE_HOUSE_BY_INDEX', index: 2})
 
 // OnClick Handler Function
-function addPoints(house, points) {
+function selectHouse(house) {
     return {
-        type: 'ADD_POINTS',
-        house, 
-        points
+        type: 'SELECT_HOUSE',
+        house
     }
-}
+};
 
 // Main App
-const SchoolAdmin = ({ houses, addPoints }) => {
+const SchoolAdmin = ({ houses, selectedHouse, selectHouse }) => {
     return (
         <main>
             {houses.map(house => (
-                <div key={house.id} onClick={() => addPoints(house, 50)}>
+                <div 
+                    key={house.id}
+                    onClick={() => selectHouse(house)}
+                    className={house === selectedHouse
+                        ? `selected ${house.name}` 
+                        : ''}
+                >
                     <img src={house.image} alt={house.name}/>
                     <div>{house.points} points</div>
                 </div>
@@ -153,15 +94,11 @@ const SchoolAdmin = ({ houses, addPoints }) => {
 
 // Map State to Props
 const mapState = state => ({
-    houses: state
+    houses: Object.values(state.houses),
+    selectedHouse: state.selectedHouse
 });
 
-// Map Dispatch to Props
-const mapDispatch = {
-    addPoints
-}
-
-const ConnectedApp = connect(mapState, mapDispatch)(SchoolAdmin);
+const ConnectedApp = connect(mapState, { selectHouse })(SchoolAdmin);
 
 ReactDOM.render(
     <Provider store={store}>
