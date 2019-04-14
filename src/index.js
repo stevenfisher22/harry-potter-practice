@@ -54,8 +54,19 @@ function reducer(state = initialState, action) {
         case 'SELECT_HOUSE':
             return {
                 ...state,
-                selectedHouse: action.house
+                selectedHouse: action.house.id
             };
+        case 'ADD_POINTS':
+            return {
+                ...state,
+                houses: {
+                    ...state.houses,
+                    [action.house.id]: {
+                        ...state.houses[action.house.id],
+                        points: state.houses[action.house.id].points + action.points
+                    }
+                }
+            }
         default: 
             return state;
     }
@@ -72,15 +83,24 @@ function selectHouse(house) {
     }
 };
 
+function addPoints(house, points) {
+    return {
+        type: 'ADD_POINTS',
+        house, 
+        points
+    }
+}
+
 // Main App
-const SchoolAdmin = ({ houses, selectedHouse, selectHouse }) => {
+const SchoolAdmin = ({ houses, selectedHouse, selectHouse, addPoints }) => {
     return (
         <main>
             {houses.map(house => (
                 <div 
                     key={house.id}
                     onClick={() => selectHouse(house)}
-                    className={house === selectedHouse
+                    onDoubleClick={() => addPoints(house, 50)}
+                    className={house.id === selectedHouse
                         ? `selected ${house.name}` 
                         : ''}
                 >
@@ -98,7 +118,7 @@ const mapState = state => ({
     selectedHouse: state.selectedHouse
 });
 
-const ConnectedApp = connect(mapState, { selectHouse })(SchoolAdmin);
+const ConnectedApp = connect(mapState, { selectHouse, addPoints })(SchoolAdmin);
 
 ReactDOM.render(
     <Provider store={store}>
